@@ -1,0 +1,24 @@
+name: "MCP Server OAuth Proxy"
+slug: "mcp_server_oauth_proxy"
+version: "1.0.1-dev.16"
+description: "Dynamic OAuth 2.1 authentication proxy for MCP servers"
+arch:
+  - amd64
+  - aarch64
+init: false
+startup: application
+boot: auto
+ports:
+  8090/tcp: 8090
+options:
+  upstream_url: "http://6560bdea-hass-n8n:5678/mcp-server/http"
+  n8n_token: ""
+  client_id: "spark-client-id"
+  client_secret: "spark-client-secret"
+  allowed_redirect_uris: "https://spark.google.com/oauth/callback, https://oauth.googleusercontent.com"
+schema:
+  upstream_url: str
+  n8n_token: str
+  client_id: str
+  client_secret: str
+  allowed_redirect_uris: str

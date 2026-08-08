@@ -1,0 +1,22 @@
+configuration:
+  external_url:
+    name: "External URL"
+    description: "The external URL for the proxy (e.g., https://your-domain.com)."
+  password:
+    name: "Password Auth"
+    description: "Plain text password for authentication (optional)."
+  google_client_id:
+    name: "Google Client ID"
+    description: "Google OAuth client ID."
+  google_client_secret:
+    name: "Google Client Secret"
+    description: "Google OAuth client secret."
+  google_allowed_users:
+    name: "Allowed Google Users"
+    description: "Comma-separated list of allowed Google users (emails)."
+  proxy_bearer_token:
+    name: "Proxy Bearer Token"
+    description: "Optional bearer token to add to the Authorization header when proxying to an HTTP/SSE server."
+  backend_command:
+    name: "Backend Command / URL"
+    description: "The stdio command (e.g., 'npx @modelcontextprotocol/server-filesystem ./') or HTTP URL (e.g., 'http://localhost:5678/mcp-server/http') of your upstream MCP server."

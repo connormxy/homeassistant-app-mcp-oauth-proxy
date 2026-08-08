@@ -1,0 +1,13 @@
+configuration:
+  upstream_url:
+    name: "Upstream URL"
+    description: "The HTTP/SSE endpoint of your upstream MCP server."
+  n8n_token:
+    name: "Bearer Token"
+    description: "The authentication token required by the upstream server."
+  client_id:
+    name: "OAuth Client ID"
+    description: "Client ID provided to the connecting application."
+  client_secret:
+    name: "OAuth Client Secret"
+    description: "Client Secret provided to the connecting application."

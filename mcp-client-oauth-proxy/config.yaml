@@ -1,0 +1,26 @@
+name: "MCP Client OAuth Proxy"
+slug: "mcp_client_oauth_proxy"
+version: "1.0.1-dev.7"
+description: "OAuth 2.1 proxy allowing MCP clients to access OAuth-protected MCP servers."
+arch:
+  - amd64
+  - aarch64
+startup: application
+boot: auto
+init: false
+ports:
+  8090/tcp: 8090
+options:
+  oauth_client_id: "your-client-id"
+  oauth_client_secret: "your-client-secret"
+  oauth_authorize_url: "https://accounts.google.com"
+  scopes_supported: "openid,email,profile,https://www.googleapis.com/auth/gmail.readonly"
+  mcp_server_url: "http://localhost:9000/mcp/gmail"
+  encryption_key: "base64-encoded-32-byte-aes-key"
+schema:
+  oauth_client_id: str
+  oauth_client_secret: str
+  oauth_authorize_url: str
+  scopes_supported: str
+  mcp_server_url: str
+  encryption_key: str

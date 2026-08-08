@@ -1,0 +1,19 @@
+configuration:
+  oauth_client_id:
+    name: "OAuth Client ID"
+    description: "The OAuth client ID from your external provider."
+  oauth_client_secret:
+    name: "OAuth Client Secret"
+    description: "The OAuth client secret from your external provider."
+  oauth_authorize_url:
+    name: "OAuth Authorize URL"
+    description: "The base authorization URL for the provider (e.g., https://accounts.google.com)."
+  scopes_supported:
+    name: "Supported Scopes"
+    description: "A comma-separated list of OAuth scopes required (e.g., openid,email,profile)."
+  mcp_server_url:
+    name: "Target MCP Server URL"
+    description: "The endpoint of the upstream MCP server to proxy requests to (e.g., http://localhost:9000/mcp/gmail)."
+  encryption_key:
+    name: "Encryption Key"
+    description: "A Base64-encoded 32-byte AES key used for internal encryption (generate using: openssl rand -base64 32)."
