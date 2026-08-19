@@ -1,14 +1,16 @@
-ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:latest
+ARG BUILD_ARCH=amd64
+ARG BUILD_FROM=ghcr.io/home-assistant/${BUILD_ARCH}-base:latest
+
+# 1. Pinned immutable upstream commit with pure-Go sqlite (amd64 + arm64)
+FROM ghcr.io/obot-platform/mcp-oauth-proxy:main-32b8278 AS upstream
+
+# 2. Official Home Assistant base image
 FROM ${BUILD_FROM}
 
-# 1. Copy ONLY the compiled executable from the official upstream image
-COPY --from=ghcr.io/obot-platform/mcp-oauth-proxy:latest /app/oauth-proxy /usr/local/bin/oauth-proxy
-
-# 2. Copy the startup script
+# Copy precompiled binary from upstream
+COPY --from=upstream /app/oauth-proxy /usr/local/bin/oauth-proxy
 COPY run.sh /
 
-# 3. Single chained RUN step to set permissions and clean temporary files
-RUN chmod +x /usr/local/bin/oauth-proxy /run.sh \
-    && rm -rf /tmp/* /var/cache/apk/*
+RUN chmod +x /usr/local/bin/oauth-proxy /run.sh
 
 CMD [ "/run.sh" ]

@@ -1,11 +1,13 @@
-ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:latest
+ARG BUILD_ARCH=amd64
+ARG BUILD_FROM=ghcr.io/home-assistant/${BUILD_ARCH}-base-python:3.12-alpine3.20
 FROM ${BUILD_FROM}
-
-RUN apk add --no-cache python3 py3-pip
-RUN pip3 install --no-cache-dir fastapi uvicorn httpx python-multipart --break-system-packages
 
 COPY proxy.py /app/proxy.py
 COPY run.sh /run.sh
-RUN chmod +x /run.sh
+
+RUN pip3 install --no-cache-dir --prefer-binary \
+        --find-links https://wheels.home-assistant.io/musllinux-index/ \
+        fastapi uvicorn httpx python-multipart \
+    && chmod +x /run.sh
 
 CMD [ "/run.sh" ]

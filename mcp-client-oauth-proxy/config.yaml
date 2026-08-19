@@ -1,7 +1,10 @@
-name: "MCP Client OAuth Proxy"
-slug: "mcp_client_oauth_proxy"
-version: "1.0.1-dev.7"
-description: "OAuth 2.1 proxy allowing MCP clients to access OAuth-protected MCP servers."
+name: "MCP Client OAuth Proxy (DEV)"
+slug: "mcp-client-oauth-proxy-dev"
+image: "ghcr.io/connormxy/mcp-client-oauth-proxy-dev"
+version: "0.1.0-dev.11"
+stage: experimental
+url: "https://github.com/connormxy/homeassistant-app-mcp-oauth-proxy#dev"
+description: "OAuth 2.1 proxy allowing MCP clients to access OAuth-protected MCP servers. (DEV)"
 arch:
   - amd64
   - aarch64
@@ -9,15 +12,17 @@ startup: application
 boot: auto
 init: false
 ports:
-  8090/tcp: 8090
+  8090/tcp: 8098
 options:
+  log_level: "debug"
   oauth_client_id: "your-client-id"
   oauth_client_secret: "your-client-secret"
-  oauth_authorize_url: "https://accounts.google.com"
-  scopes_supported: "openid,email,profile,https://www.googleapis.com/auth/gmail.readonly"
-  mcp_server_url: "http://localhost:9000/mcp/gmail"
+  oauth_authorize_url: "https://ifttt.com"
+  scopes_supported: "mcp"
+  mcp_server_url: "https://ifttt.com"
   encryption_key: "base64-encoded-32-byte-aes-key"
 schema:
+  log_level: "list(trace|debug|info|notice|warning|error|fatal)?"
   oauth_client_id: str
   oauth_client_secret: str
   oauth_authorize_url: str

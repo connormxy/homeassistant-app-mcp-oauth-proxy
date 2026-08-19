@@ -1,6 +1,8 @@
-name: "MCP Server OAuth Proxy"
-slug: "mcp_server_oauth_proxy"
-version: "1.0.1-dev.16"
+name: "MCP Server OAuth Proxy (DEV)"
+slug: "mcp_server_oauth_proxy-dev"
+image: "ghcr.io/connormxy/mcp-server-oauth-proxy-dev"
+version: "0.1.0-dev.36"
+stage: experimental
 description: "Dynamic OAuth 2.1 authentication proxy for MCP servers"
 arch:
   - amd64
@@ -11,14 +13,47 @@ boot: auto
 ports:
   8090/tcp: 8090
 options:
-  upstream_url: "http://6560bdea-hass-n8n:5678/mcp-server/http"
-  n8n_token: ""
-  client_id: "spark-client-id"
-  client_secret: "spark-client-secret"
-  allowed_redirect_uris: "https://spark.google.com/oauth/callback, https://oauth.googleusercontent.com"
+  servers:
+    - client_name: "Google Spark"
+      server_name: "n8n"
+      server_url: "http://6560bdea-hass-n8n:5678/mcp-server/http"
+      bearer_token: "your-token-here"
+      client_id: "spark-client-1"
+      client_secret: "secret-1"
+      allowed_redirect_uris: "https://oauth-redirect.googleusercontent.com"
+      host: "n8n-oauth.connormoseley.com"
+      path_prefix: ""
+    - client_name: "Google Spark"
+      server_name: "IFTTT"
+      server_url: "https://ifttt.com/mcp"
+      bearer_token: ""
+      client_id: "spark-client-2"
+      client_secret: "secret-2"
+      allowed_redirect_uris: "https://oauth-redirect.googleusercontent.com"
+      host: "ifttt-oauth.connormoseley.com"
+      path_prefix: ""
+      server_authorize_url: "https://ifttt.com/oauth/authorize"
+      server_token_url: "https://ifttt.com/oauth/token"
+      server_client_id: ""
+      server_client_secret: ""
+      server_refresh_token: ""
 schema:
-  upstream_url: str
-  n8n_token: str
-  client_id: str
-  client_secret: str
-  allowed_redirect_uris: str
+  servers:
+    - client_name: str?
+      server_name: str?
+      server_url: str?
+      server_scheme: str?
+      server_host: str?
+      server_port: int?
+      server_path: str?
+      bearer_token: str?
+      client_id: str
+      client_secret: str
+      allowed_redirect_uris: str?
+      host: str?
+      path_prefix: str?
+      server_authorize_url: str?
+      server_token_url: str?
+      server_client_id: str?
+      server_client_secret: str?
+      server_refresh_token: str?

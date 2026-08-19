@@ -1,4 +1,7 @@
 configuration:
+  log_level:
+    name: "Log Level"
+    description: "Controls the logging verbosity (trace, debug, info, warning, error)."
   oauth_client_id:
     name: "OAuth Client ID"
     description: "The OAuth client ID from your external provider."
@@ -13,7 +16,7 @@ configuration:
     description: "A comma-separated list of OAuth scopes required (e.g., openid,email,profile)."
   mcp_server_url:
     name: "Target MCP Server URL"
-    description: "The endpoint of the upstream MCP server to proxy requests to (e.g., http://localhost:9000/mcp/gmail)."
+    description: "The base URL of the upstream MCP server to proxy to (e.g., https://ifttt.com or http://localhost:9000). Must NOT contain a path, query, or fragment."
   encryption_key:
     name: "Encryption Key"
     description: "A Base64-encoded 32-byte AES key used for internal encryption (generate using: openssl rand -base64 32)."

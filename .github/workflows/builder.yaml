@@ -1,0 +1,136 @@
+name: Builder
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    name: Initialize builds
+    outputs:
+      server_proxy: ${{ steps.server_proxy.outputs.matrix }}
+      client_proxy: ${{ steps.client_proxy.outputs.matrix }}
+    steps:
+      - name: Get server_proxy matrix
+        id: server_proxy
+        uses: home-assistant/builder/actions/prepare-multi-arch-matrix@master
+        with:
+          architectures: '["aarch64", "amd64"]'
+          image-name: ${{ github.ref_name == 'dev' && 'mcp-server-oauth-proxy-dev' || 'mcp-server-oauth-proxy' }}
+
+      - name: Get client_proxy matrix
+        id: client_proxy
+        uses: home-assistant/builder/actions/prepare-multi-arch-matrix@master
+        with:
+          architectures: '["aarch64", "amd64"]'
+          image-name: ${{ github.ref_name == 'dev' && 'mcp-client-oauth-proxy-dev' || 'mcp-client-oauth-proxy' }}
+
+  # mcp-server-oauth-proxy
+  build_server_proxy:
+    name: Build mcp-server-oauth-proxy ${{ matrix.arch }}
+    needs: init
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.init.outputs.server_proxy) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get version
+        id: version
+        shell: bash
+        run: |
+          version=$(grep -E '^version: ' mcp-server-oauth-proxy/config.yaml | awk '{print $2}' | tr -d '"'\''\r')
+          echo "version=$version" >> $GITHUB_OUTPUT
+      - name: Build image
+        uses: home-assistant/builder/actions/build-image@master
+        with:
+          arch: ${{ matrix.arch }}
+          context: mcp-server-oauth-proxy
+          container-registry-password: ${{ secrets.GITHUB_TOKEN }}
+          image: ${{ matrix.image }}
+          image-tags: |
+            ${{ steps.version.outputs.version }}
+            ${{ github.ref_name == 'dev' && 'dev' || 'latest' }}
+          push: "true"
+          version: ${{ steps.version.outputs.version }}
+
+  manifest_server_proxy:
+    name: Publish mcp-server-oauth-proxy manifest
+    needs: [init, build_server_proxy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get version
+        id: version
+        shell: bash
+        run: |
+          version=$(grep -E '^version: ' mcp-server-oauth-proxy/config.yaml | awk '{print $2}' | tr -d '"'\''\r')
+          echo "version=$version" >> $GITHUB_OUTPUT
+      - name: Publish manifest
+        uses: home-assistant/builder/actions/publish-multi-arch-manifest@master
+        with:
+          architectures: '["aarch64", "amd64"]'
+          container-registry-password: ${{ secrets.GITHUB_TOKEN }}
+          image-name: ${{ github.ref_name == 'dev' && 'mcp-server-oauth-proxy-dev' || 'mcp-server-oauth-proxy' }}
+          image-tags: |
+            ${{ steps.version.outputs.version }}
+            ${{ github.ref_name == 'dev' && 'dev' || 'latest' }}
+
+  # mcp-client-oauth-proxy
+  build_client_proxy:
+    name: Build mcp-client-oauth-proxy ${{ matrix.arch }}
+    needs: init
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.init.outputs.client_proxy) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get version
+        id: version
+        shell: bash
+        run: |
+          version=$(grep -E '^version: ' mcp-client-oauth-proxy/config.yaml | awk '{print $2}' | tr -d '"'\''\r')
+          echo "version=$version" >> $GITHUB_OUTPUT
+      - name: Build image
+        uses: home-assistant/builder/actions/build-image@master
+        with:
+          arch: ${{ matrix.arch }}
+          context: mcp-client-oauth-proxy
+          container-registry-password: ${{ secrets.GITHUB_TOKEN }}
+          image: ${{ matrix.image }}
+          image-tags: |
+            ${{ steps.version.outputs.version }}
+            ${{ github.ref_name == 'dev' && 'dev' || 'latest' }}
+          push: "true"
+          version: ${{ steps.version.outputs.version }}
+
+  manifest_client_proxy:
+    name: Publish mcp-client-oauth-proxy manifest
+    needs: [init, build_client_proxy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get version
+        id: version
+        shell: bash
+        run: |
+          version=$(grep -E '^version: ' mcp-client-oauth-proxy/config.yaml | awk '{print $2}' | tr -d '"'\''\r')
+          echo "version=$version" >> $GITHUB_OUTPUT
+      - name: Publish manifest
+        uses: home-assistant/builder/actions/publish-multi-arch-manifest@master
+        with:
+          architectures: '["aarch64", "amd64"]'
+          container-registry-password: ${{ secrets.GITHUB_TOKEN }}
+          image-name: ${{ github.ref_name == 'dev' && 'mcp-client-oauth-proxy-dev' || 'mcp-client-oauth-proxy' }}
+          image-tags: |
+            ${{ steps.version.outputs.version }}
+            ${{ github.ref_name == 'dev' && 'dev' || 'latest' }}

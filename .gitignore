@@ -1,1 +1,12 @@
 __pycache__/
+*.py[cod]
+*$py.class
+*.env
+*.env.*
+*.ps1
+tokens.json
+credentials.json
+scratch/
+.vscode/
+.idea/
+*.log

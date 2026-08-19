@@ -1,13 +1,55 @@
 configuration:
-  upstream_url:
-    name: "Upstream URL"
-    description: "The HTTP/SSE endpoint of your upstream MCP server."
-  n8n_token:
+  client_name:
+    name: "Client Name"
+    description: "Optional name of the connecting AI application (e.g. 'Google Spark', 'Azure')."
+  server_name:
+    name: "Server Name"
+    description: "Optional name of the target MCP service (e.g. 'n8n', 'GitHub', 'IFTTT')."
+  server_url:
+    name: "Server URL (Full)"
+    description: "Full HTTP/SSE endpoint of your upstream MCP server (e.g. http://6560bdea-hass-n8n:5678/mcp-server/http). Overridden by modular fields if provided."
+  server_scheme:
+    name: "Server Scheme"
+    description: "Protocol for modular server address ('http' or 'https'). Defaults to 'http'."
+  server_host:
+    name: "Server Host / IP"
+    description: "Docker container name, LAN IP, or hostname of the target MCP server (e.g. '6560bdea-hass-n8n' or '192.168.86.61')."
+  server_port:
+    name: "Server Port"
+    description: "Port number of the target MCP server (e.g. 5678, 8082, 9584)."
+  server_path:
+    name: "Server Path"
+    description: "API route or endpoint path on the target server (e.g. '/mcp-server/http', '/sse', '/mcp')."
+  bearer_token:
     name: "Bearer Token"
-    description: "The authentication token required by the upstream server."
+    description: "Static authentication token required by the target server (if not using OAuth refresh)."
   client_id:
     name: "OAuth Client ID"
-    description: "Client ID provided to the connecting application."
+    description: "Client ID provided to the connecting AI client (e.g. spark-client-1)."
   client_secret:
     name: "OAuth Client Secret"
-    description: "Client Secret provided to the connecting application."
+    description: "Client Secret provided to the connecting AI client."
+  allowed_redirect_uris:
+    name: "Allowed Redirect URIs"
+    description: "Comma-separated list of permitted OAuth callback URIs (e.g. https://spark.google.com/oauth/callback)."
+  host:
+    name: "Incoming Host / Subdomain"
+    description: "Specific public hostname or subdomain routed to this server (e.g. n8n-oauth.connormoseley.com)."
+  path_prefix:
+    name: "Path Prefix"
+    description: "Optional URL path prefix for single-domain routing (e.g. /n8n)."
+  server_authorize_url:
+    name: "Server OAuth Authorize URL"
+    description: "Authorization endpoint for upstream third-party OAuth provider (e.g. https://ifttt.com/oauth/authorize)."
+  server_token_url:
+    name: "Server OAuth Token URL"
+    description: "Token endpoint for third-party upstream OAuth providers (e.g. https://ifttt.com/oauth/token)."
+  server_client_id:
+    name: "Server OAuth Client ID"
+    description: "Client ID registered with the upstream third-party OAuth provider."
+  server_client_secret:
+    name: "Server OAuth Client Secret"
+    description: "Client Secret registered with the upstream third-party OAuth provider."
+  server_refresh_token:
+    name: "Server Refresh Token"
+    description: "Initial refresh token used to automatically maintain authentication with upstream OAuth provider."
